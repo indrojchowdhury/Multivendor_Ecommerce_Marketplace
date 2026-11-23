@@ -1,3 +1,4 @@
+
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -18,14 +19,15 @@ def env_list(name, default=""):
 
 
 DEBUG = env_bool("DEBUG", False)
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise ImproperlyConfigured("SECRET_KEY is missing. Add it to backend/.env.")
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "perry-cells-greensboro-facts.trycloudflare.com",
-]
+
+ALLOWED_HOSTS = env_list(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1",
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -46,6 +48,7 @@ AUTH_USER_MODEL = "users.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -72,17 +75,17 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DB_NAME = os.getenv("DB_NAME")
-if DB_NAME:
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    import dj_database_url
+
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": DB_NAME,
-            "USER": os.getenv("DB_USER", ""),
-            "PASSWORD": os.getenv("DB_PASSWORD", ""),
-            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-            "PORT": os.getenv("DB_PORT", "5432"),
-        }
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=0,
+            ssl_require=True,
+        )
     }
 else:
     DATABASES = {
@@ -103,17 +106,48 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Dhaka"
 USE_I18N = True
 USE_TZ = True
-STATIC_URL = "static/"
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
+
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:5173",
+).rstrip("/")
+
 SSLCOMMERZ_STORE_ID = os.getenv("SSLCOMMERZ_STORE_ID", "")
 SSLCOMMERZ_STORE_PASSWORD = os.getenv("SSLCOMMERZ_STORE_PASSWORD", "")
 SSLCOMMERZ_IS_SANDBOX = env_bool("SSLCOMMERZ_IS_SANDBOX", True)
 SSLCOMMERZ_IPN_URL = os.getenv("SSLCOMMERZ_IPN_URL", "").strip()
-SSLCOMMERZ_CALLBACK_BASE_URL = os.getenv("SSLCOMMERZ_CALLBACK_BASE_URL", "").strip()
-SSLCOMMERZ_CALLBACK_BASE_URL = SSLCOMMERZ_CALLBACK_BASE_URL.rstrip("/") if SSLCOMMERZ_CALLBACK_BASE_URL else ""
+
+SSLCOMMERZ_CALLBACK_BASE_URL = os.getenv(
+    "SSLCOMMERZ_CALLBACK_BASE_URL",
+    "",
+).strip()
+
+SSLCOMMERZ_CALLBACK_BASE_URL = (
+    SSLCOMMERZ_CALLBACK_BASE_URL.rstrip("/")
+    if SSLCOMMERZ_CALLBACK_BASE_URL
+    else ""
+)
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -138,4 +172,8 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS",
     "http://localhost:5173,http://127.0.0.1:5173",
+)
+
+CSRF_TRUSTED_ORIGINS = env_list(
+    "CSRF_TRUSTED_ORIGINS",
 )
