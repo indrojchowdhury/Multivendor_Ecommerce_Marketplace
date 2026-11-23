@@ -502,6 +502,24 @@ class ProductApiTests(APITestCase):
         self.inactive.refresh_from_db()
         self.assertTrue(self.inactive.is_active)
 
+    def test_seller_deleted_product_is_not_returned_in_product_list(self):
+        self.client.force_authenticate(user=self.seller)
+        response = self.client.delete(
+            reverse("seller-product-detail", args=[self.headphones.id])
+        )
+
+        self.assertEqual(response.status_code, 204)
+        self.headphones.refresh_from_db()
+        self.assertFalse(self.headphones.is_active)
+        self.assertTrue(self.headphones.is_deleted)
+
+        response = self.client.get(reverse("seller-product-list"))
+
+        self.assertEqual(response.status_code, 200)
+        listed_ids = [product["id"] for product in response.data]
+        self.assertNotIn(self.headphones.id, listed_ids)
+        self.assertIn(self.inactive.id, listed_ids)
+
     def test_customer_cannot_manage_seller_products(self):
         customer = User.objects.create_user(
             email="customer@example.com",

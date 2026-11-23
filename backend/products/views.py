@@ -266,7 +266,7 @@ class SellerProductListCreateView(generics.ListCreateAPIView):
         if self.request.user.role == "admin":
             return Product.objects.all().select_related("category")
         return Product.objects.filter(
-            seller=self.request.user
+            seller=self.request.user, is_deleted=False
         ).select_related("category")
 
 
@@ -278,12 +278,13 @@ class SellerProductDetailView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.user.role == "admin":
             return Product.objects.all().select_related("category")
         return Product.objects.filter(
-            seller=self.request.user
+            seller=self.request.user, is_deleted=False
         ).select_related("category")
 
     def perform_destroy(self, instance):
         instance.is_active = False
-        instance.save(update_fields=["is_active"])
+        instance.is_deleted = True
+        instance.save(update_fields=["is_active", "is_deleted"])
 
 
 class AdminProductListView(generics.ListAPIView):
