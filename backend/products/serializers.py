@@ -241,7 +241,7 @@ class SellerProductSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["seller"] = self.context["request"].user
-        validated_data["is_approved"] = False
+        validated_data["is_approved"] = True
         return super().create(validated_data)
 
     def to_representation(self, instance):
