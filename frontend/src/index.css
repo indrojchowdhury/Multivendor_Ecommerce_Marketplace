@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+html.dark body {
+  background-color: #2a2a28;
+  color: #f4f4f5;
+}
+
+html.dark .bg-white {
+  background-color: #34363b !important;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-slate-100 {
+  background-color: #24262a !important;
+}
+
+html.dark .bg-slate-200 {
+  background-color: #45484f !important;
+}
+
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700 {
+  color: #f4f4f5 !important;
+}
+
+html.dark .text-slate-600,
+html.dark .text-slate-500,
+html.dark .text-slate-400 {
+  color: #a1a1aa !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300 {
+  border-color: #45484f !important;
+}
+
+html.dark .bg-zinc-900 {
+  background-color: #292b2f !important;
+}
+
+html.dark .bg-black,
+html.dark .bg-zinc-800 {
+  background-color: #34363b !important;
+}
+
+html.dark header {
+  background-color: #30312f !important;
+  border-color: #514a42 !important;
+}
+
+html.dark header form {
+  background-color: #34363b !important;
+  border-color: #5b5d57 !important;
+  color: #f4f4f5 !important;
+}
+
+html.dark footer {
+  background-color: #30312f !important;
+  border-color: #514a42 !important;
+}
+
+html.dark header a > span[aria-label="FlipBox"] > span:first-child,
+html.dark footer a > span[aria-label="FlipBox"] > span:first-child {
+  color: #f4f4f5 !important;
+}
+
+html.dark .bg-orange-100\/70 {
+  background-color: #302d29 !important;
+}
+
+html.dark .bg-red-50,
+html.dark .bg-rose-50 {
+  background-color: #3f1d24 !important;
+}
+
+html.dark .bg-amber-50,
+html.dark .bg-yellow-50 {
+  background-color: #3b2d16 !important;
+}
+
+html.dark .bg-green-50,
+html.dark .bg-emerald-50 {
+  background-color: #14352b !important;
+}
+
+html.dark .bg-sky-50,
+html.dark .bg-blue-50 {
+  background-color: #172f46 !important;
+}
+
+html.dark .bg-orange-100,
+html.dark .bg-violet-50 {
+  background-color: #303422 !important;
+}
+
+html.dark .border-red-200,
+html.dark .border-amber-200,
+html.dark .border-green-200,
+html.dark .border-emerald-200,
+html.dark .border-sky-200,
+html.dark .border-blue-200,
+html.dark .border-orange-300,
+html.dark .border-violet-200 {
+  border-color: #52525b !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #a1a1aa;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color-scheme: dark;
+}
+
+.seller-product-action {
+  background-color: transparent;
+  transition: none;
+}
+
+.seller-product-action:hover {
+  background-color: transparent;
+}
+
+.seller-product-action--edit {
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+.seller-product-action--delete {
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+html.dark .seller-product-action--edit,
+html.dark .seller-product-action--edit:hover {
+  border-color: #52525b;
+  color: #d4d4d8;
+}
+
+html.dark .seller-product-action--delete,
+html.dark .seller-product-action--delete:hover {
+  border-color: #7f1d1d;
+  color: #f87171;
+}
+
+html.dark .seller-products-table-row:hover {
+  background-color: #34363b !important;
+}
+
+html.dark .seller-dashboard-order-row:hover {
+  background-color: #34363b !important;
+}
