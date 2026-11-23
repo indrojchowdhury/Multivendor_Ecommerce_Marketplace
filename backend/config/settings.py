@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "users",
     "products",
     "orders",
+    "cloudinary_storage",
+    "cloudinary",
 ]
 
 AUTH_USER_MODEL = "users.User"
@@ -112,7 +114,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
