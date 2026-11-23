@@ -1,6 +1,8 @@
+
 import {
   Heart,
   LayoutDashboard,
+  LogOut,
   Moon,
   Search,
   ShoppingCart,
@@ -17,7 +19,7 @@ import { useTheme } from "../../context/ThemeContext";
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const canShop = user && ["customer", "admin"].includes(user.role);
   const { totalItems } = useCart();
   const { wishlistCount } = useWishlist();
@@ -30,9 +32,7 @@ function Navbar() {
 
   useEffect(() => {
     const query = searchTerm.trim();
-    if (!query) {
-      return undefined;
-    }
+    if (!query) return undefined;
 
     let cancelled = false;
     const timeoutId = window.setTimeout(() => {
@@ -60,7 +60,6 @@ function Navbar() {
 
   function handleSearch(event) {
     event.preventDefault();
-
     const query = searchTerm.trim();
 
     if (query) {
@@ -73,6 +72,11 @@ function Navbar() {
     setSearchTerm("");
     setShowSuggestions(false);
     navigate(`/products/${product.id}`);
+  }
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login", { replace: true });
   }
 
   return (
@@ -99,7 +103,6 @@ function Navbar() {
             className="flex items-center rounded-xl border border-orange-300 bg-orange-100 px-3 text-slate-900 focus-within:border-orange-600"
           >
             <Search size={19} className="shrink-0 text-orange-600" />
-
             <input
               type="search"
               value={searchTerm}
@@ -139,11 +142,8 @@ function Navbar() {
                       alt=""
                       className="h-10 w-10 shrink-0 rounded-lg object-cover"
                     />
-
                     <div>
-                      <p className="font-medium text-slate-900">
-                        {product.name}
-                      </p>
+                      <p className="font-medium text-slate-900">{product.name}</p>
                       <p className="text-sm text-slate-500">
                         ৳{product.price.toLocaleString("en-US")}
                       </p>
@@ -191,6 +191,19 @@ function Navbar() {
           </Link>
         )}
 
+        {user && (
+          <button
+            type="button"
+            onClick={handleLogout}
+            aria-label="Logout"
+            title="Logout"
+            className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-red-600 hover:bg-red-100"
+          >
+            <LogOut size={20} />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
+        )}
+
         <button
           type="button"
           onClick={toggleTheme}
@@ -201,33 +214,35 @@ function Navbar() {
           {theme === "dark" ? <Sun size={21} /> : <Moon size={21} />}
         </button>
 
-        {canShop && <Link
-          to="/wishlist"
-          aria-label={`Wishlist, ${wishlistCount} items`}
-          className="relative shrink-0 rounded-xl p-2 text-slate-600 hover:bg-red-100 hover:text-red-600"
-        >
-          <Heart size={22} />
+        {canShop && (
+          <Link
+            to="/wishlist"
+            aria-label={`Wishlist, ${wishlistCount} items`}
+            className="relative shrink-0 rounded-xl p-2 text-slate-600 hover:bg-red-100 hover:text-red-600"
+          >
+            <Heart size={22} />
+            {wishlistCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-600 px-1 text-xs font-semibold text-white">
+                {wishlistCount > 99 ? "99+" : wishlistCount}
+              </span>
+            )}
+          </Link>
+        )}
 
-          {wishlistCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-600 px-1 text-xs font-semibold text-white">
-              {wishlistCount > 99 ? "99+" : wishlistCount}
-            </span>
-          )}
-        </Link>}
-
-        {canShop && <Link
-          to="/cart"
-          aria-label={`Shopping cart, ${totalItems} items`}
-          className="relative shrink-0 rounded-xl p-2 text-slate-600 hover:bg-orange-200 hover:text-orange-700"
-        >
-          <ShoppingCart size={22} />
-
-          {totalItems > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-600 px-1 text-xs font-semibold text-white">
-              {totalItems > 99 ? "99+" : totalItems}
-            </span>
-          )}
-        </Link>}
+        {canShop && (
+          <Link
+            to="/cart"
+            aria-label={`Shopping cart, ${totalItems} items`}
+            className="relative shrink-0 rounded-xl p-2 text-slate-600 hover:bg-orange-200 hover:text-orange-700"
+          >
+            <ShoppingCart size={22} />
+            {totalItems > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-600 px-1 text-xs font-semibold text-white">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            )}
+          </Link>
+        )}
       </div>
     </header>
   );
