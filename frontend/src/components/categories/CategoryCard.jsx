@@ -1,48 +1,24 @@
 
 import { ArrowUpRight } from "lucide-react";
 
-function CategoryCard({ category, index = 0 }) {
+function CategoryCard({ category }) {
   const Icon = category.icon;
-  const palette = [
-    {
-      border: "hover:border-orange-500",
-      iconBg: "bg-orange-200",
-      iconText: "text-orange-600",
-      iconHover: "group-hover:bg-orange-700",
-      arrow: "group-hover:text-orange-700",
-    },
-    {
-      border: "hover:border-emerald-300",
-      iconBg: "bg-emerald-100",
-      iconText: "text-emerald-600",
-      iconHover: "group-hover:bg-emerald-400",
-      arrow: "group-hover:text-emerald-500",
-    },
-    {
-      border: "hover:border-red-300",
-      iconBg: "bg-red-100",
-      iconText: "text-red-600",
-      iconHover: "group-hover:bg-red-400",
-      arrow: "group-hover:text-red-500",
-    },
-  ];
-  const colors = palette[index % palette.length];
 
   return (
     <a
       href="#products"
-      className={`group flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-1 ${colors.border} hover:shadow-lg`}
+      className="group flex h-full items-center justify-between rounded-2xl border border-[#131921] bg-[#131921] p-5 text-white transition hover:-translate-y-1 hover:border-orange-400 hover:shadow-lg"
     >
       <div>
-        <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colors.iconBg} ${colors.iconText} transition ${colors.iconHover} group-hover:text-white`}>
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-white transition group-hover:bg-white/20">
           <Icon size={24} />
         </div>
 
-        <h3 className="mt-4 font-semibold text-slate-900">
+        <h3 className="mt-4 font-semibold text-white">
           {category.name}
         </h3>
         {category.product_count !== undefined && (
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-300">
             {category.product_count}{" "}
             {category.product_count === 1 ? "product" : "products"}
           </p>
@@ -51,7 +27,7 @@ function CategoryCard({ category, index = 0 }) {
 
       <ArrowUpRight
         size={20}
-        className={`text-slate-400 transition ${colors.arrow}`}
+        className="text-slate-300 transition group-hover:text-white"
       />
     </a>
   );

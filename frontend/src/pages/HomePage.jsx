@@ -263,7 +263,7 @@ function HomePage() {
             <p role="alert" className="text-sm text-red-600">{categoryError}</p>
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
-              {categories.map((category, index) => (
+              {categories.map((category) => (
                 <div
                   key={category.id}
                   onClick={() => handleCategoryClick(category.name)}
@@ -278,7 +278,7 @@ function HomePage() {
                   className="cursor-pointer rounded-2xl outline-none transition focus-visible:ring-2 focus-visible:ring-orange-600"
                   aria-label={`Show ${category.name} products`}
                 >
-                  <CategoryCard category={category} index={index} />
+                  <CategoryCard category={category} />
                 </div>
               ))}
             </div>
