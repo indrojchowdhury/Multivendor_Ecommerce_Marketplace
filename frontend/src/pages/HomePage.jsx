@@ -117,6 +117,11 @@ function HomePage() {
     });
   }
 
+  const productPages = [];
+  for (let index = 0; index < products.length; index += 5) {
+    productPages.push(products.slice(index, index + 5));
+  }
+
   return (
     <div>
       <section
@@ -188,13 +193,18 @@ function HomePage() {
                   className="min-w-0 flex-1 overflow-x-auto scroll-smooth"
                   aria-label="Popular products"
                 >
-                  <div className="flex w-full gap-3 sm:gap-5">
-                    {products.map((product) => (
-                      <div
-                        key={product.id}
-                        className="w-[calc((100%_-_0.75rem)/2)] shrink-0 sm:w-[calc((100%_-_2.5rem)/3)] lg:w-[calc((100%_-_5rem)/5)]"
-                      >
-                        <ProductCard product={product} compact />
+                  <div className="flex w-full">
+                    {productPages.map((page, pageIndex) => (
+                      <div key={pageIndex} className="w-full shrink-0">
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
+                          {page.map((product) => (
+                            <ProductCard
+                              key={product.id}
+                              product={product}
+                              compact
+                            />
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
