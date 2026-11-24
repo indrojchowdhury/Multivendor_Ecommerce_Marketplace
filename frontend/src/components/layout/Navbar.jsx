@@ -3,14 +3,17 @@ import {
   Heart,
   LayoutDashboard,
   LogOut,
+  Menu,
   Moon,
   Search,
   ShoppingCart,
   Sun,
   UserRound,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getCategories } from "../../api/categories";
 import { getProducts } from "../../api/products";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
@@ -28,7 +31,38 @@ function Navbar() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionsError, setSuggestionsError] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoryError, setCategoryError] = useState("");
+  const [showCategories, setShowCategories] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getCategories()
+      .then((data) => {
+        if (!cancelled) {
+          setCategories(data);
+          setCategoriesLoading(false);
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          console.error("Failed to load navbar categories:", error);
+          setCategoryError(error.message || "Could not load categories.");
+          setCategoriesLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    setShowCategories(false);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const query = searchTerm.trim();
@@ -82,6 +116,16 @@ function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#131921] bg-[#131921] text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-2 px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8">
+        <button
+          type="button"
+          onClick={() => setShowCategories((isOpen) => !isOpen)}
+          aria-label={showCategories ? "Hide categories" : "Show categories"}
+          aria-expanded={showCategories}
+          aria-controls="navbar-categories"
+          className="flex shrink-0 items-center justify-center rounded-xl p-2 text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+        >
+          {showCategories ? <X size={24} /> : <Menu size={24} />}
+        </button>
         <Link
           to="/"
           onClick={() => {
@@ -244,6 +288,40 @@ function Navbar() {
           </Link>
         )}
       </div>
+      {showCategories && (
+        <div
+          id="navbar-categories"
+          className="absolute inset-x-0 top-full border-t border-slate-700 bg-[#131921] shadow-xl"
+        >
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            {categoryError ? (
+              <p role="alert" className="text-sm text-red-300">
+                {categoryError}
+              </p>
+            ) : categories.length > 0 ? (
+              <nav aria-label="Product categories">
+                <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  {categories.map((category) => (
+                    <li key={category.id}>
+                      <Link
+                        to={`/?category=${encodeURIComponent(category.name)}#products`}
+                        onClick={() => setShowCategories(false)}
+                        className="block rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-orange-300"
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ) : categoriesLoading ? (
+              <p className="text-sm text-slate-300">Loading categories...</p>
+            ) : (
+              <p className="text-sm text-slate-300">No categories available.</p>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
