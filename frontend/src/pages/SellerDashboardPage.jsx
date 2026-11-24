@@ -98,7 +98,7 @@ function SellerDashboardPage() {
 
   if (!user?.sellerApproved) {
     return (
-      <section className="min-h-screen bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+      <section className="min-h-screen bg-orange-300/70 px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-sm">
           <h1 className="text-2xl font-bold text-slate-900">Seller account under review</h1>
           <p className="mt-3 text-slate-600">
@@ -149,7 +149,7 @@ function SellerDashboardPage() {
   }
 
   return (
-    <section className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <section className="min-h-screen bg-orange-300/70 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>

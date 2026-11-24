@@ -245,7 +245,7 @@ function HomePage() {
       {/* Categories Section */}
       <section
         id="categories"
-        className="bg-orange-200/70 px-4 py-12 sm:px-6 lg:px-8"
+        className="bg-orange-300/70 px-4 py-12 sm:px-6 lg:px-8"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mb-8">

@@ -144,7 +144,7 @@ function AdminDashboardPage() {
   ];
 
   return (
-    <section className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <section className="min-h-screen bg-orange-300/70 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <p className="text-sm font-semibold uppercase tracking-wider text-orange-600">
