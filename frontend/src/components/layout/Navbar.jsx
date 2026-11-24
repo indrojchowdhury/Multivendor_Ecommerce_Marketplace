@@ -116,30 +116,32 @@ function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#131921] bg-[#131921] text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-2 px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8">
-        <button
-          type="button"
-          onClick={() => setShowCategories((isOpen) => !isOpen)}
-          aria-label={showCategories ? "Hide categories" : "Show categories"}
-          aria-expanded={showCategories}
-          aria-controls="navbar-categories"
-          className="flex shrink-0 items-center justify-center rounded-xl p-2 text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
-        >
-          {showCategories ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        <Link
-          to="/"
-          onClick={() => {
-            setSearchTerm("");
-            setShowSuggestions(false);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          className="shrink-0"
-        >
-          <span className="text-2xl font-black tracking-tight sm:text-3xl" aria-label="FlipBox">
-            <span className="text-white">Flip</span>
-            <span className="text-orange-400">Box</span>
-          </span>
-        </Link>
+        <div className="flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setShowCategories((isOpen) => !isOpen)}
+            aria-label={showCategories ? "Hide categories" : "Show categories"}
+            aria-expanded={showCategories}
+            aria-controls="navbar-categories"
+            className="flex items-center justify-center rounded-xl p-2 text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+          >
+            {showCategories ? <X size={24} /> : <Menu size={24} />}
+          </button>
+          <Link
+            to="/"
+            onClick={() => {
+              setSearchTerm("");
+              setShowSuggestions(false);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className="shrink-0"
+          >
+            <span className="text-2xl font-black tracking-tight sm:text-3xl" aria-label="FlipBox">
+              <span className="text-white">Flip</span>
+              <span className="text-orange-400">Box</span>
+            </span>
+          </Link>
+        </div>
 
         <div className="relative order-last w-full min-w-0 md:order-none md:mx-auto md:max-w-xl md:flex-1">
           <form
@@ -203,90 +205,92 @@ function Navbar() {
           )}
         </div>
 
-        {!user && location.pathname === "/" && (
+        <div className="ml-auto flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+          {!user && location.pathname === "/" && (
+            <Link
+              to="/register"
+              className="flex shrink-0 items-center whitespace-nowrap rounded-xl p-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white"
+            >
+              Become a seller
+            </Link>
+          )}
+
           <Link
-            to="/register"
-            className="flex shrink-0 items-center whitespace-nowrap rounded-xl p-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white"
+            to={user ? "/profile" : "/login"}
+            aria-label={user ? "My profile" : "Sign in"}
+            className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white"
           >
-            Become a seller
+            <UserRound size={22} />
+            <span className="hidden max-w-24 truncate sm:inline">
+              {user ? user.name.split(" ")[0] : "Sign in"}
+            </span>
           </Link>
-        )}
 
-        <Link
-          to={user ? "/profile" : "/login"}
-          aria-label={user ? "My profile" : "Sign in"}
-          className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white"
-        >
-          <UserRound size={22} />
-          <span className="hidden max-w-24 truncate sm:inline">
-            {user ? user.name.split(" ")[0] : "Sign in"}
-          </span>
-        </Link>
+          {user && ["seller", "admin"].includes(user.role) && (
+            <Link
+              to={user.role === "admin" ? "/admin/dashboard" : "/seller/dashboard"}
+              aria-label={user.role === "admin" ? "Admin dashboard" : "Seller dashboard"}
+              title={user.role === "admin" ? "Admin dashboard" : "Seller dashboard"}
+              className="flex shrink-0 items-center gap-2 rounded-xl bg-emerald-100 px-3 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-200"
+            >
+              <LayoutDashboard size={20} />
+              <span>{user.role === "admin" ? "Admin" : "Dashboard"}</span>
+            </Link>
+          )}
 
-        {user && ["seller", "admin"].includes(user.role) && (
-          <Link
-            to={user.role === "admin" ? "/admin/dashboard" : "/seller/dashboard"}
-            aria-label={user.role === "admin" ? "Admin dashboard" : "Seller dashboard"}
-            title={user.role === "admin" ? "Admin dashboard" : "Seller dashboard"}
-            className="flex shrink-0 items-center gap-2 rounded-xl bg-emerald-100 px-3 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-200"
-          >
-            <LayoutDashboard size={20} />
-            <span>{user.role === "admin" ? "Admin" : "Dashboard"}</span>
-          </Link>
-        )}
+          {user && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              aria-label="Logout"
+              title="Logout"
+              className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-red-600 hover:bg-red-100"
+            >
+              <LogOut size={20} />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          )}
 
-        {user && (
           <button
             type="button"
-            onClick={handleLogout}
-            aria-label="Logout"
-            title="Logout"
-            className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-red-600 hover:bg-red-100"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            className="flex shrink-0 items-center justify-center rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-white"
           >
-            <LogOut size={20} />
-            <span className="hidden sm:inline">Logout</span>
+            {theme === "dark" ? <Sun size={21} /> : <Moon size={21} />}
           </button>
-        )}
 
-        <button
-          type="button"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          className="flex shrink-0 items-center justify-center rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-white"
-        >
-          {theme === "dark" ? <Sun size={21} /> : <Moon size={21} />}
-        </button>
+          {canShop && (
+            <Link
+              to="/wishlist"
+              aria-label={`Wishlist, ${wishlistCount} items`}
+              className="relative shrink-0 rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-red-300"
+            >
+              <Heart size={22} />
+              {wishlistCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-600 px-1 text-xs font-semibold text-white">
+                  {wishlistCount > 99 ? "99+" : wishlistCount}
+                </span>
+              )}
+            </Link>
+          )}
 
-        {canShop && (
-          <Link
-            to="/wishlist"
-            aria-label={`Wishlist, ${wishlistCount} items`}
-            className="relative shrink-0 rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-red-300"
-          >
-            <Heart size={22} />
-            {wishlistCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-600 px-1 text-xs font-semibold text-white">
-                {wishlistCount > 99 ? "99+" : wishlistCount}
-              </span>
-            )}
-          </Link>
-        )}
-
-        {canShop && (
-          <Link
-            to="/cart"
-            aria-label={`Shopping cart, ${totalItems} items`}
-            className="relative shrink-0 rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-white"
-          >
-            <ShoppingCart size={22} />
-            {totalItems > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-600 px-1 text-xs font-semibold text-white">
-                {totalItems > 99 ? "99+" : totalItems}
-              </span>
-            )}
-          </Link>
-        )}
+          {canShop && (
+            <Link
+              to="/cart"
+              aria-label={`Shopping cart, ${totalItems} items`}
+              className="relative shrink-0 rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-white"
+            >
+              <ShoppingCart size={22} />
+              {totalItems > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-600 px-1 text-xs font-semibold text-white">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </Link>
+          )}
+        </div>
       </div>
       {showCategories && (
         <div
@@ -299,8 +303,8 @@ function Navbar() {
                 {categoryError}
               </p>
             ) : categories.length > 0 ? (
-              <nav aria-label="Product categories">
-                <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              <nav aria-label="Product categories" className="max-w-sm">
+                <ul className="flex flex-col gap-1">
                   {categories.map((category) => (
                     <li key={category.id}>
                       <Link
