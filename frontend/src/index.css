@@ -46,19 +46,19 @@ html.dark .bg-zinc-800 {
 }
 
 html.dark header {
-  background-color: #30312f !important;
-  border-color: #514a42 !important;
+  background-color: #131921 !important;
+  border-color: #131921 !important;
 }
 
 html.dark header form {
-  background-color: #34363b !important;
-  border-color: #5b5d57 !important;
-  color: #f4f4f5 !important;
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
 html.dark footer {
-  background-color: #30312f !important;
-  border-color: #514a42 !important;
+  background-color: #131921 !important;
+  border-color: #131921 !important;
 }
 
 html.dark header a > span[aria-label="FlipBox"] > span:first-child,
@@ -66,7 +66,8 @@ html.dark footer a > span[aria-label="FlipBox"] > span:first-child {
   color: #f4f4f5 !important;
 }
 
-html.dark .bg-orange-200\/70 {
+html.dark .bg-orange-200\/70,
+html.dark .bg-orange-300\/70 {
   background-color: #302d29 !important;
 }
 

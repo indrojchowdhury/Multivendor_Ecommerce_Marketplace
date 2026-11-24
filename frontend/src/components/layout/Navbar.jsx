@@ -80,7 +80,7 @@ function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-orange-300 bg-[#fffaf5] text-slate-900">
+    <header className="sticky top-0 z-50 border-b border-[#131921] bg-[#131921] text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-2 px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8">
         <Link
           to="/"
@@ -92,15 +92,15 @@ function Navbar() {
           className="shrink-0"
         >
           <span className="text-2xl font-black tracking-tight sm:text-3xl" aria-label="FlipBox">
-            <span className="text-slate-900">Flip</span>
-            <span className="text-orange-600">Box</span>
+            <span className="text-white">Flip</span>
+            <span className="text-orange-400">Box</span>
           </span>
         </Link>
 
         <div className="relative order-last w-full min-w-0 md:order-none md:mx-auto md:max-w-xl md:flex-1">
           <form
             onSubmit={handleSearch}
-            className="flex items-center rounded-xl border border-orange-300 bg-orange-100 px-3 text-slate-900 focus-within:border-orange-600"
+            className="flex items-center rounded-xl border border-slate-300 bg-white px-3 text-slate-900 focus-within:border-orange-500"
           >
             <Search size={19} className="shrink-0 text-orange-600" />
             <input
@@ -162,7 +162,7 @@ function Navbar() {
         {!user && location.pathname === "/" && (
           <Link
             to="/register"
-            className="flex shrink-0 items-center whitespace-nowrap rounded-xl p-2 text-sm font-medium text-slate-700 hover:bg-orange-200 hover:text-orange-700"
+            className="flex shrink-0 items-center whitespace-nowrap rounded-xl p-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white"
           >
             Become a seller
           </Link>
@@ -171,7 +171,7 @@ function Navbar() {
         <Link
           to={user ? "/profile" : "/login"}
           aria-label={user ? "My profile" : "Sign in"}
-          className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-slate-700 hover:bg-orange-200 hover:text-orange-700"
+          className="flex shrink-0 items-center gap-2 rounded-xl p-2 text-sm font-medium text-slate-200 hover:bg-white/10 hover:text-white"
         >
           <UserRound size={22} />
           <span className="hidden max-w-24 truncate sm:inline">
@@ -209,7 +209,7 @@ function Navbar() {
           onClick={toggleTheme}
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          className="flex shrink-0 items-center justify-center rounded-xl p-2 text-slate-600 hover:bg-orange-200 hover:text-orange-700"
+          className="flex shrink-0 items-center justify-center rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-white"
         >
           {theme === "dark" ? <Sun size={21} /> : <Moon size={21} />}
         </button>
@@ -218,7 +218,7 @@ function Navbar() {
           <Link
             to="/wishlist"
             aria-label={`Wishlist, ${wishlistCount} items`}
-            className="relative shrink-0 rounded-xl p-2 text-slate-600 hover:bg-red-100 hover:text-red-600"
+            className="relative shrink-0 rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-red-300"
           >
             <Heart size={22} />
             {wishlistCount > 0 && (
@@ -233,7 +233,7 @@ function Navbar() {
           <Link
             to="/cart"
             aria-label={`Shopping cart, ${totalItems} items`}
-            className="relative shrink-0 rounded-xl p-2 text-slate-600 hover:bg-orange-200 hover:text-orange-700"
+            className="relative shrink-0 rounded-xl p-2 text-slate-200 hover:bg-white/10 hover:text-white"
           >
             <ShoppingCart size={22} />
             {totalItems > 0 && (

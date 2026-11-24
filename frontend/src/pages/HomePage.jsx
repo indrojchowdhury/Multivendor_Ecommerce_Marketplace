@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/products/ProductCard";
 import { getProducts } from "../api/products";
@@ -121,7 +121,7 @@ function HomePage() {
     <div>
       <section
         id="products"
-        className="bg-orange-200/70 px-3 py-5 sm:px-6 sm:py-7 lg:px-8"
+        className="bg-orange-300/70 px-3 py-5 sm:px-6 sm:py-7 lg:px-8"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-slate-300 pb-3 sm:mb-5">
@@ -170,6 +170,19 @@ function HomePage() {
           ) : products.length > 0 ? (
             products.length > 5 ? (
               <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+                <button
+                  type="button"
+                  onClick={() =>
+                    productsScroller.current?.scrollBy({
+                      left: -productsScroller.current.clientWidth,
+                      behavior: "smooth",
+                    })
+                  }
+                  className="shrink-0 rounded-full border border-slate-200 bg-white p-3 text-slate-700 shadow-md transition hover:bg-orange-50 hover:text-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                  aria-label="Show previous popular products"
+                >
+                  <ChevronLeft size={22} />
+                </button>
                 <div
                   ref={productsScroller}
                   className="min-w-0 flex-1 overflow-x-auto scroll-smooth"
@@ -230,7 +243,10 @@ function HomePage() {
       </section>
 
       {/* Categories Section */}
-      <section id="categories" className="bg-white px-4 py-12 sm:px-6 lg:px-8">
+      <section
+        id="categories"
+        className="bg-orange-200/70 px-4 py-12 sm:px-6 lg:px-8"
+      >
         <div className="mx-auto max-w-7xl">
           <div className="mb-8">
             <p className="text-sm font-semibold uppercase tracking-widest text-orange-600">
