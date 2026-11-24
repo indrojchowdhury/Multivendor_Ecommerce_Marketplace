@@ -1,6 +1,6 @@
 
-import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import ProductCard from "../components/products/ProductCard";
 import { getProducts } from "../api/products";
@@ -10,6 +10,7 @@ import localCategories from "../data/categories";
 
 function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const productsScroller = useRef(null);
 
   const searchTerm = searchParams.get("search") || "";
   const selectedCategory = searchParams.get("category") || "All";
@@ -70,7 +71,7 @@ function HomePage() {
 
         const data = await getProducts({
           ...params,
-          page_size: 5,
+          page_size: 48,
           ordering: "-rating",
         });
 
@@ -120,7 +121,7 @@ function HomePage() {
     <div>
       <section
         id="products"
-        className="bg-orange-100/70 px-3 py-5 sm:px-6 sm:py-7 lg:px-8"
+        className="bg-orange-200/70 px-3 py-5 sm:px-6 sm:py-7 lg:px-8"
       >
         <div className="mx-auto max-w-7xl">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-slate-300 pb-3 sm:mb-5">
@@ -167,11 +168,45 @@ function HomePage() {
               </button>
             </div>
           ) : products.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
-              {products.slice(0, 5).map((product) => (
-                <ProductCard key={product.id} product={product} compact />
-              ))}
-            </div>
+            products.length > 5 ? (
+              <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+                <div
+                  ref={productsScroller}
+                  className="min-w-0 flex-1 overflow-x-auto scroll-smooth"
+                  aria-label="Popular products"
+                >
+                  <div className="flex w-full gap-3 sm:gap-5">
+                    {products.map((product) => (
+                      <div
+                        key={product.id}
+                        className="w-[calc((100%_-_0.75rem)/2)] shrink-0 sm:w-[calc((100%_-_2.5rem)/3)] lg:w-[calc((100%_-_5rem)/5)]"
+                      >
+                        <ProductCard product={product} compact />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    productsScroller.current?.scrollBy({
+                      left: productsScroller.current.clientWidth,
+                      behavior: "smooth",
+                    })
+                  }
+                  className="shrink-0 rounded-full border border-slate-200 bg-white p-3 text-slate-700 shadow-md transition hover:bg-orange-50 hover:text-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                  aria-label="Show more popular products"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5">
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} compact />
+                ))}
+              </div>
+            )
           ) : (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
               <h3 className="text-lg font-semibold text-slate-900">
