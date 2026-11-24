@@ -293,36 +293,38 @@ function Navbar() {
         </div>
       </div>
       {showCategories && (
-        <div
-          id="navbar-categories"
-          className="absolute inset-x-0 top-full border-t border-slate-700 bg-[#131921] shadow-xl"
-        >
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            {categoryError ? (
-              <p role="alert" className="text-sm text-red-300">
-                {categoryError}
-              </p>
-            ) : categories.length > 0 ? (
-              <nav aria-label="Product categories" className="max-w-sm">
-                <ul className="flex flex-col gap-1">
-                  {categories.map((category) => (
-                    <li key={category.id}>
-                      <Link
-                        to={`/?category=${encodeURIComponent(category.name)}#products`}
-                        onClick={() => setShowCategories(false)}
-                        className="block rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-orange-300"
-                      >
-                        {category.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ) : categoriesLoading ? (
-              <p className="text-sm text-slate-300">Loading categories...</p>
-            ) : (
-              <p className="text-sm text-slate-300">No categories available.</p>
-            )}
+        <div className="absolute inset-x-0 top-full z-50">
+          <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+            <div
+              id="navbar-categories"
+              className="w-64 max-w-[calc(100vw_-_1.5rem)] rounded-b-xl border border-slate-700 bg-[#131921] p-3 shadow-xl"
+            >
+              {categoryError ? (
+                <p role="alert" className="text-sm text-red-300">
+                  {categoryError}
+                </p>
+              ) : categories.length > 0 ? (
+                <nav aria-label="Product categories">
+                  <ul className="flex flex-col gap-1">
+                    {categories.map((category) => (
+                      <li key={category.id}>
+                        <Link
+                          to={`/?category=${encodeURIComponent(category.name)}#products`}
+                          onClick={() => setShowCategories(false)}
+                          className="block rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-orange-300"
+                        >
+                          {category.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              ) : categoriesLoading ? (
+                <p className="text-sm text-slate-300">Loading categories...</p>
+              ) : (
+                <p className="text-sm text-slate-300">No categories available.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
